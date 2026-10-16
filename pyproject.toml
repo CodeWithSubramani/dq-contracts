@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dq-contracts"
+version = "0.1.0"
+description = "Declarative, versioned data contracts with SQL-pushdown validation, anomaly detection and semver-enforced schema evolution."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Subramani R" }]
+keywords = ["data-quality", "data-contracts", "data-engineering", "duckdb", "pandas"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Database",
+  "Intended Audience :: Developers",
+]
+dependencies = ["pydantic>=2.5", "pyyaml>=6", "pandas>=2.0"]
+
+[project.optional-dependencies]
+duckdb = ["duckdb>=1.0"]
+parquet = ["pyarrow>=14"]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.10", "types-PyYAML", "duckdb>=1.0"]
+
+[project.scripts]
+dq-contracts = "dq_contracts.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dq_contracts"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "B"]
+ignore = ["E501", "E731", "B008"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true

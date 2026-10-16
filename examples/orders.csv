@@ -1,0 +1,6 @@
+order_id,customer_id,status,amount,currency,email,updated_at
+ord_0000000a,c_1,placed,120.50,INR,a@example.com,2026-10-16T08:00:00Z
+ord_0000000b,c_2,paid,99.00,USD,b@example.com,2026-10-16T08:05:00Z
+ord_0000000c,c_3,delivered,15.25,EUR,,2026-10-16T08:10:00Z
+ord_0000000c,c_3,delivered,15.25,EUR,,2026-10-16T08:10:00Z
+ord_BAD,c_4,teleported,-5,INR,d@example.com,2026-10-16T08:20:00Z

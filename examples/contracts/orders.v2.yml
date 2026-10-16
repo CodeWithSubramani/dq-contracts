@@ -1,0 +1,46 @@
+# Proposed change: add a `refunded` status and a nullable `coupon_code` column.
+# `dq-contracts diff orders.v1.yml orders.v2.yml` flags the new enum value as BREAKING,
+# so the 1.1.0 version below is rejected — it must be 2.0.0.
+dataset: orders
+version: 1.1.0
+owner: commerce-data@company.example
+description: One row per customer order, produced by the checkout service CDC stream.
+primary_key: [order_id]
+columns:
+  - name: order_id
+    type: string
+    nullable: false
+    pattern: "ord_[0-9a-f]{8}"
+  - name: customer_id
+    type: string
+    nullable: false
+  - name: status
+    type: string
+    nullable: false
+    allowed_values: [placed, paid, shipped, delivered, cancelled, refunded]
+  - name: amount
+    type: float
+    nullable: false
+    min: 0
+    max: 100000
+  - name: currency
+    type: string
+    allowed_values: [INR, USD, EUR]
+  - name: email
+    type: string
+    pii: true
+  - name: coupon_code
+    type: string
+  - name: updated_at
+    type: timestamp
+    nullable: false
+freshness:
+  column: updated_at
+  max_age_hours: 6
+volume:
+  min_rows: 1
+  anomaly_threshold: 3.5
+  min_history: 7
+checks:
+  - name: delivered_orders_have_amount
+    sql: "SELECT COUNT(*) FROM {table} WHERE status = 'delivered' AND amount <= 0"
